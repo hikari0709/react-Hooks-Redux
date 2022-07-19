@@ -4,7 +4,7 @@ import reducer from '../reducers/';
 
 import Event from "./Event";
 
-const App = props => {
+const App = () => {
   const [state, dispatch] = useReducer(reducer, []);
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
@@ -21,6 +21,14 @@ const App = props => {
     setBody('');
   }
 
+  const deleteAllEvent = e => {
+    e.preventDefault();
+    const result = window.confirm('全てのイベントを本当に削除しても良いですか？');
+    if (result) dispatch({ type: 'DELETE_ALL_EVENTS' })
+  }
+
+  const unCreatable = title === '' || body === '';
+
   return (
     <div className="container-fluid">
       <h1>イベント作成フォーム</h1>
@@ -33,8 +41,8 @@ const App = props => {
           <label htmlFor="formEventBody">イベント内容</label>
           <textarea type="text" className="form-control" id="formEventBody" value={body} onChange={e => setBody(e.target.value)} />
         </div>
-        <button className="btn btn-primary" onClick={addEvent}>イベントを作成する</button>
-        <button className="btn btn-danger">全てのイベントを削除する</button>
+        <button className="btn btn-primary" onClick={addEvent} disabled={unCreatable}>イベントを作成する</button>
+        <button className="btn btn-danger" onClick={deleteAllEvent} disabled={state.length === 0}>全てのイベントを削除する</button>
       </form>
       <h2>イベント一覧</h2>
       <table className="table table-hover">
