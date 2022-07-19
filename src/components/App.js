@@ -1,20 +1,38 @@
-import React, { useEffect, useState } from 'react';
+import React, { useReducer, useState } from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
+import reducer from '../reducers/';
 
 const App = props => {
+  const [state, dispatch] = useReducer(reducer, []);
+  const [title, setTitle] = useState('');
+  const [body, setBody] = useState('');
+
+  const addEvent = e => {
+    e.preventDefault();
+    dispatch({
+      type: 'CREATE_EVENT',
+      title,
+      body
+    });
+
+    setTitle('');
+    setBody('');
+  }
+
+  console.log({ state });
   return (
     <div className="container-fuild">
       <h1>イベント作成フォーム</h1>
       <form name="">
         <div className="form-group">
           <label htmlFor="formEventTitle">タイトル</label>
-          <input type="text" className="form-control" id="formEventTitle"/>
+          <input type="text" className="form-control" id="formEventTitle" value={title} onChange={e => setTitle(e.target.value)} />
         </div>
         <div className="form-group">
           <label htmlFor="formEventBody">イベント内容</label>
-          <textarea type="text" className="form-control" id="formEventBody"/>
+          <textarea type="text" className="form-control" id="formEventBody" value={body} onChange={e => setBody(e.target.value)} />
         </div>
-        <button className="btn btn-primary">イベントを作成する</button>
+        <button className="btn btn-primary" onClick={addEvent}>イベントを作成する</button>
         <button className="btn btn-danger">全てのイベントを削除する</button>
       </form>
       <h2>イベント一覧</h2>
